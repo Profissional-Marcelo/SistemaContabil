@@ -17,14 +17,19 @@ public class LucroPresumido extends AtividadesLP{
             
             if (atividades [0] == true){
                 this.trimestre = (float) (this.trimestre*0.016);
-            }
+            } else if(atividades [1] == true){
+                this.trimestre = (float) (this.trimestre*0.08);
+            } else{
+            System.out.println("Ainda está indisponivel, aguarde as novas atualizações...");
+            }  
             
             System.out.println("Seu resultado é:");
             System.out.println("PIS: R$ "+this.valor*0.0065);
             System.out.println("COFINS: R$ "+this.valor*0.03);
             System.out.println("CSS: R$ "+this.trimestre*0.09);
             System.out.println("IRPJ: R$ "+this.trimestre*0.15);
-        }
+        } 
+         
     }
     
     

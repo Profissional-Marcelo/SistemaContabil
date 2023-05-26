@@ -1,15 +1,4 @@
 /** OBSERVAÇÃO: 
- * (Esse texto foi escrito no dia 02/05/2023, quando o código estava em sua versão
- * 0.0.3)
- * Estou atualizando esse código uma vez por dia enquanto aplico cada aprendizado
- * de meus estudos sobre Java.
- * Atualmente esse código está em sua versão 0.0.3 e trabalharei para que ele
- * fique em sua melhor performance até a versão 9.9.9, Onde irei realizar um vídeo
- * mostrando o comparativo entre sua primeira e atual versão e finalmente irei parar
- * de atualizar. Irei me esforçar para que chegue em sua última versão melhor do que
- * nunca.
- * 
- * 
  * DIA 03/05/2023: MUDANÇA
  * * A partir de agora o projeto só vai atualizar de 7 em 7 dias porém as atualizações
  * serão muito maiores.
@@ -21,7 +10,36 @@
  * 4* Projeto fighterFADERGS
  * 5* Projeto politizei
  * 
+ * DIA 20/05/2023
+ *
+ * VERSÃO ALPHA (Até versão 1.0.0)
  * 
+ * VERSÃO BETA  (Até versão 2.0.0)
+ * 
+ * VERSÃO RC (Até versão 3.0.0)
+ * 
+ * VERSÃO RTM (Até versão 4.0.0)
+ * 
+ * VERSÃO GA (Até versão 9.9.9)
+ * 
+ * fim das atualizações, 
+ * Espero que um dia chegue lá. :D
+ * 
+ * 
+ * Metas:
+ * 
+ * 1º Concluir e deixar todos os regimes tributários completos, realizando cálculos do modelo federal
+ * de maneira correta até a atualização 0.1.0 
+ * 
+ * 2º Implementar algumas diferenças de apuração de imposto devido a leis do estado, oque pode acarretar
+ * em alguns descontos na apuração do imposto, para empresas de um determinado estado. Até a atualização 0.2.0
+ * 
+ * 3º Implementar ArrayLists para evoluir o software e fazer com que ele comece a armazenar dados, permitindo que o 
+ * usuário possa por exemplo, excluir a conta cadastrada sem ter necessáriamente que fechar e reabrir o programa. 
+ * Até a atualização 0.2.0
+ * 
+ * 4º Implementar banco de dados... Uma evolução do ArrayList, vai demandar bastante esforço e estudo, e é uma atualização
+ * ainda mais futura que as outras, mas acredito que fique pronto até a atualização 0.4.0
  * 
  */  
 
@@ -39,7 +57,7 @@ public class SistemaContabil {
       
          //Menu
         while(contador == 0){
-        System.out.println("=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=\nv 0.0.5");
+        System.out.println("=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=\nv 0.0.6");
         System.out.println("Bem vindo ao seu software de Sistema Contábil!");
         System.out.println("|1| Cadastrar conta");
         System.out.println("|2| Visualizar cadastro");
@@ -80,7 +98,7 @@ public class SistemaContabil {
                     sn.calculoSn();
                                              }
                  else if (lp.getLucroPresumido()){
-                 lp.calculoLp();
+                    lp.calculoLp();
                                              } 
                  else if (usuario.lr == true){
                  System.out.println("Serviço ainda indisponível, aguarde novas atualizações!");

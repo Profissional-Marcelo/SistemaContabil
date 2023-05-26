@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class Cadastrar{
   //Atributos
    Scanner leia = new Scanner(System.in);
-   private float valor, trimestre;
    private String nome;
    private int cnpj, rt;
    SimplesNacional sn;
@@ -68,7 +67,7 @@ public class Cadastrar{
         this.la = la;
     }
          public void cadastrar(){
-         System.out.println("=== Bem vindo ao software contábil (v 0.0.4) ===");
+         System.out.println("=== Bem vindo ao software contábil (v 0.0.6) ===");
          System.out.println("Para iniciar o cadastro escreva o nome da sua empresa!");
          setNome(leia.nextLine());
          System.out.println("Digite seu CNPJ");
