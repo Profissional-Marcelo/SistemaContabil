@@ -1,37 +1,31 @@
 package sistemacontabil;
-public class LucroPresumido extends AtividadesLP{
-    public float valor, trimestre; 
-    
-    
-    public void cadastroLP(){
-       cadastroATV();
-        System.out.println("Empresa criada como Lucro Presumido!");
+public class LucroPresumido extends Empresa {
+    private int atividade;
+    private double recTri; 
+    public LucroPresumido(String nome, String cnpj, double receita, int rt, String senha, int atividade, double recTri) {
+        super(nome, cnpj, receita, rt, senha);
+        this.atividade = atividade;
+        this.recTri = recTri;
     }
-    
-    public void calculoLp(){
-         if(lucroPresumido == true){
-            System.out.println("Qual seu faturamento esse mês?");
-            this.valor = leia.nextFloat();
-            System.out.println("Qual a soma de seu faturamento nos últimos três meses?");
-            this.trimestre = leia.nextFloat();
-            
-            if (atividades [0] == true){
-                this.trimestre = (float) (this.trimestre*0.016);
-            } else if(atividades [1] == true){
-                this.trimestre = (float) (this.trimestre*0.08);
+
+    @Override
+    public void calcularImposto() {
+        if(getRt() == 2){
+            if (atividade == 1){
+                this.recTri = (double) (this.recTri*0.016);
+            }else if(atividade == 2){
+                this.recTri = (double) (this.recTri*0.08);
             } else{
             System.out.println("Ainda está indisponivel, aguarde as novas atualizações...");
             }  
             
             System.out.println("Seu resultado é:");
-            System.out.println("PIS: R$ "+this.valor*0.0065);
-            System.out.println("COFINS: R$ "+this.valor*0.03);
-            System.out.println("CSS: R$ "+this.trimestre*0.09);
-            System.out.println("IRPJ: R$ "+this.trimestre*0.15);
+            System.out.println("PIS: R$ "+getReceita()*0.0065);
+            System.out.println("COFINS: R$ "+getReceita()*0.03);
+            System.out.println("CSS: R$ "+getReceita()*0.09);
+            System.out.println("IRPJ: R$ "+getReceita()*0.15);
         } 
          
     }
+    }
     
-    
-    
-}

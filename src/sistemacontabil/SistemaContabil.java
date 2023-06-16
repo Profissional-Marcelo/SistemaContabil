@@ -44,83 +44,334 @@
  */  
 
 package sistemacontabil;
+import java.util.ArrayList;
 import java.util.Scanner;
 public class SistemaContabil {
     public static void main(String[] args) {
-     //Introdução   
-     Scanner leia = new Scanner(System.in);
-      int contador=0, menu;
-      Cadastrar usuario = new Cadastrar();
-      SimplesNacional sn = new SimplesNacional();
-      LucroPresumido lp = new LucroPresumido();
-      
-      
-         //Menu
-        while(contador == 0){
-        System.out.println("=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=\nv 0.0.6");
-        System.out.println("Bem vindo ao seu software de Sistema Contábil!");
-        System.out.println("|1| Cadastrar conta");
-        System.out.println("|2| Visualizar cadastro");
-        System.out.println("|3| Calcular imposto");
-        System.out.println("|4| Saír");
-        System.out.println("=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=_=");
+        //Scanner
+        Scanner ss = new Scanner(System.in);
+        Scanner sn = new Scanner(System.in);
         
-   
-        menu = leia.nextInt();
-            switch(menu){
-            case 1:
-                usuario.cadastrar();
-                usuario.setRt(leia.nextInt());
-                switch(usuario.getRt()){
-                 case 1: 
-                 sn.cadastroSN();
-                 break;
-                case 2:
-                lp.cadastroLP();
-                 break;
-                 case 3:
-                 System.out.println("Empresa registrada como Lucro Real!");
-                 usuario.setLr(true);
-                 break;
-                 case 4:
-                 System.out.println("Empresa registrada como Lucro Arbitrado!");
-                 break;
-                 default:
-                System.out.println("Opção inválida!");
-                 break;                                    }      
-            break;    
-            case 2:
-                System.out.println("Serviço em manutenção, tente novamente mais tarde!");
-                contador++;
-            break;
-            case 3:
-                 if (sn.getSimplesNacional()){
-                    sn.calculoSn();
-                                             }
-                 else if (lp.getLucroPresumido()){
-                    lp.calculoLp();
-                                             } 
-                 else if (usuario.lr == true){
-                 System.out.println("Serviço ainda indisponível, aguarde novas atualizações!");
-                                             } 
-                 else if (usuario.la == true){
-                 System.out.println("Serviço ainda indisponível, aguarde novas atualizações!");
-                                             }
-                 else{
-                     System.out.println("Você deve cadastrar sua conta primeiro!");
-                                             }
-                 contador++;                     
-           break;
-            case 4:
-                contador++;
-            break;
+        // Variáveis
+        boolean sairMenuPrincipal = true;
+        String senha, cnpj, nome;
+        int rt, anexo, tabela, atividade;
+        double receita, recDoze, recTri;
+        
+        // Array list
+        ArrayList<SimplesNacional> clientesn = new ArrayList();
+        ArrayList<LucroPresumido> clientelp = new ArrayList();
+        ArrayList<LucroReal> clientelr = new ArrayList();
+        
+        do{
+            //Menu Principal
+            System.out.println("###############\nV - 0.0.7"); 
+            System.out.println("1 - Simples Nacional");
+            System.out.println("2 - Lucro Presumido");
+            System.out.println("3 - Lucro Real");
+            System.out.println("4 - Saír");
+            int menu = sn.nextInt();
+            switch(menu) {
+                case 1: 
+                    System.out.println("Você já tem cadastro?");
+                    System.out.println("1 - Sim");
+                    System.out.println("2 - Não");
+                    int opcaocadastro = sn.nextInt();
+               
+                    if(opcaocadastro == 1){
+                        //Verificador de clientes
+                        if (clientesn.isEmpty() == true){
+                            System.out.println("===========================");
+                            System.out.println("Não há clientes cadastrados");
+                            System.out.println("===========================");
+                        break;
+                        }
+                        
+                        boolean sairMenuSn = true;
+                        boolean sairPainelSn = true;
+                        do {
+                            System.out.println("Informe o cnpj da empresa:");
+                            cnpj = ss.nextLine();
+                            System.out.println("Informe a senha da empresa");
+                            senha = ss.nextLine();
+                            for (SimplesNacional x : clientesn){
+                             if (cnpj.equals(x.getCnpj()) && senha.equals(x.getSenha())) {
+                                 System.out.println("Painel aberto para a empresa:" + x.getNome());
+                                do {
+                                    System.out.println("====== Painel da empresa" + x.getNome() + "=====");
+                                    System.out.println("1 - Calcular imposto"); 
+                                    System.out.println("2 - Fechar painel");
+                                    int resp = sn.nextInt();
+                                    
+                                    switch (resp) {
+                                        case 1:
+                                           for(SimplesNacional s: clientesn){
+                                               s.calcularImposto();
+                                           }
+                                        break;
+                                        case 2:
+                                        sairPainelSn = false;
+                                        sairMenuSn = false;
+                                        break;
+                                        default:
+                                        break;
+                                    }
+                                }while(sairPainelSn == true);
+                             } else {
+                                 System.out.println("CNPJ ou senha inválidos ou não cadastrado");
+                                 System.out.println("Quer tentar novamente? 1 - Sim\n2- Não");
+                                 int resp = sn.nextInt();
+                                 switch(resp) {
+                                     case 1:
+                                         sairMenuSn = true;
+                                     break;
+                                     case 2: 
+                                         sairMenuSn = false;
+                                     break;
+                                     default:
+                                         System.out.println("Opção inválida");
+                                     break;
+                                 }
+                             }
+                            }
+                        }while (sairMenuSn == true);
+                    }else if(opcaocadastro == 2){
+                        //Cadastro de empresa SN
+                        rt = 1;
+                    System.out.println("Nome:");
+                    nome = ss.nextLine();
+                    System.out.println("CNPJ");
+                    cnpj = ss.nextLine();
+                    System.out.println("Receita:");
+                    receita = sn.nextDouble();
+                            System.out.println("###Informe o anexo correspondente a sua empresa:###");
+                            System.out.println("|1| Anexo I");
+                            System.out.println("|2| Anexo II");
+                            System.out.println("|3| Anexo III");
+                            System.out.println("|4| Anexo IV");
+                            System.out.println("|5| Anexo V");
+                            System.out.println("");
+                            System.out.println("=====================================================");
+                            System.out.println("Anexo I: empresas de comércio (lojas em geral)");
+                            System.out.println("");
+                            System.out.println("Anexo II: fábricas/indústrias e empresas industriais");
+                            System.out.println("");
+                            System.out.println("Anexo III: empresas que oferecem serviços de instalação,");
+                            System.out.println("de reparos e de manutenção. Consideram-se neste anexo ainda,");
+                            System.out.println("agências de viagens, escritórios de contabilidade, academias,");
+                            System.out.println("laboratórios, empresas de medicina e odontologia.");
+                            System.out.println("");
+                            System.out.println("Anexo IV:  empresas que fornecem serviço de limpeza,");
+                            System.out.println("vigilância, obras, construção de imóveis, serviços advocatícios");
+                            System.out.println("");
+                            System.out.println("Anexo V: empresas que fornecem serviço de auditoria,");
+                            System.out.println(" jornalismo, tecnologia, publicidade, engenharia, entre outros");
+                            System.out.println("=====================================================");
+                            anexo = sn.nextInt();
+                           int a = 0;
+                            while(a == 0){
+                                if(anexo > 0 && anexo<6){
+                              a = 1;   
+                            } else {
+                                    System.out.println("Resposta incorreta! Tente novamente");
+                                    anexo = sn.nextInt();
+                                }
+                            }
+                             System.out.println("Escreva seu faturamento nos últimos doze meses de empresa:");
+                             recDoze = sn.nextDouble();
+                             tabela = 0;
+                             
+                             if(recDoze <= 180000.00){
+                                 tabela = 1;
+                                 System.out.println("Sua empresa foi cadastrada como tabela:" + tabela);
+                             
+                             } else if(recDoze > 180000.00 && recDoze <=360000.00){
+                                 tabela = 2;
+                                System.out.println("Sua empresa foi cadastrada como tabela:" + tabela);
+                             } else if(recDoze > 360000.00 && recDoze <= 720000.00){
+                                 tabela = 3;
+                                 System.out.println("Sua empresa foi cadastrada como tabela:" + tabela);
+                             } else if(recDoze > 720000.00 && recDoze <=1800000.00){
+                                  tabela = 4;
+                                  System.out.println("Sua empresa foi cadastrada como tabela:" + tabela);
+                             } else if(recDoze > 1800000.00 && recDoze <=3600000.00){
+                                 tabela = 5;
+                                 System.out.println("Sua empresa foi cadastrada como tabela:" + tabela);
+                             } else if (recDoze >= 3600000.00){
+                                 tabela = 6;
+                                  System.out.println("Sua empresa foi cadastrada como tabela:" + tabela);
+                             }
+                             System.out.println("Crie sua senha:");
+                             senha = ss.nextLine();
+                             // Criando objeto da empresaSN
+                             SimplesNacional sn1 = new SimplesNacional(nome, cnpj, receita, rt, senha, anexo, tabela, recDoze);
+                             //Adicionando ao arrayList
+                             clientesn.add(sn1);    
+                                           }else{
+                        System.out.println("Opção inválida, digite uma opção válida.");
                     }
-
+                 break;
+                case 2: 
+                       System.out.println("Você já tem cadastro?");
+                    System.out.println("[1] - Sim");
+                    System.out.println("[2] - Não");
+                    opcaocadastro = sn.nextInt();  
+                    
+                            if(opcaocadastro == 2){
+                                //cadastro LucroPresumido
+                                rt = 2;
+                                System.out.println("Nome:");
+                                  nome = ss.nextLine();
+                                 System.out.println("CNPJ");
+                                  cnpj = ss.nextLine();
+                                 System.out.println("Receita:");
+                                 receita = sn.nextDouble();
+                                 System.out.println("=== Informe a atividade correspondente a sua empresa: ===");
+                 System.out.println("|0| Revenda de combustíveis e gás natural");
+                 System.out.println("|1| Transporte de cargas");
+                 System.out.println("|2| Atividades imobiliárias");
+                 System.out.println("|3| Industrialização para terceiros com recebimento do material");
+                 System.out.println("|4| Demais atividades não especificadas que não sejam prestação de serviço");
+                 System.out.println("|5| Transporte que não seja de cargas e serviços em geral");
+                 System.out.println("|6| Serviços profissionais que exijam formação técnica ou acadêmica – como advocacia e engenharia");
+                 System.out.println("|7| Intermediação de negócios");
+                 System.out.println("|8| Administração de bens móveis ou imóveis, locação ou cessão desses mesmos bens");
+                 System.out.println("|9| Construção civil e serviços em geral");
+                 int escolha = sn.nextInt();
+                 atividade = 10000;
+                 switch (escolha){
+                     case 0:
+                          System.out.println("Empresa cadastrada como atividade 0!");
+                          atividade = 0;
+                     break;
+                     case 1: 
+                          System.out.println("Empresa cadastrada como atividade 1!");
+                          atividade = 1;
+                     break;
+                     case 2:
+                          System.out.println("Empresa cadastrada como atividade 2!");
+                          atividade = 2;
+                     break;
+                     case 3:
+                          System.out.println("Empresa cadastrada como atividade 3!");
+                          atividade = 3;
+                     break;
+                     case 4: 
+                          System.out.println("Empresa cadastrada como atividade 4!");
+                          atividade = 4;
+                     break;
+                     case 5:
+                          System.out.println("Empresa cadastrada como atividade 5!");
+                          atividade = 5;
+                     break;
+                     case 6:
+                          System.out.println("Empresa cadastrada como atividade 6!");
+                          atividade = 6;
+                     break;
+                     case 7:
+                          System.out.println("Empresa cadastrada como atividade 7!");
+                         atividade = 7;
+                     break;
+                     case 8:
+                          System.out.println("Empresa cadastrada como atividade 8!");
+                          atividade = 8;
+                     break;
+                     case 9:
+                          System.out.println("Empresa cadastrada como atividade 9!");
+                          atividade = 9;
+                     break;
+                     default:
+                         System.out.println("Opção inválida!");
+                     break;
+                 }
+                 System.out.println("Informe sua receita nos últimos três meses");
+                 recTri = sn.nextDouble();
+                 System.out.println("Crie sua senha:");
+                             senha = ss.nextLine();
+                 
+                 // Criando objeto de empresa LucroPresumido
+                 LucroPresumido lp1 = new LucroPresumido(nome, cnpj, receita, rt, senha, atividade, recTri);
+                 
+                 // Adicionando no ArrayList do LucroPreusmido
+                 clientelp.add(lp1);
+                 
+                            }else if(opcaocadastro == 1){
+                                if(clientelp.isEmpty() == true){
+                                  System.out.println("================================");
+                            System.out.println("Nao há clientes cadastrados.");
+                            System.out.println("================================");
+                            break;
+                        }  
+                        
+                        boolean sairPainelLp = true;
+                        boolean sairMenuLp = true;
+                        do {
+                            System.out.println("Informe o cnpj:");
+                            cnpj = ss.nextLine();
+                            System.out.println("Informe a senha:");
+                            senha = ss.nextLine();
+                           
+                            for (LucroPresumido x : clientelp){
+                                
+                                if (cnpj.equals(x.getCnpj()) && senha.equals(x.getSenha())){
+                                    System.out.println("Painel da empresa" + x.getNome());
+                             do {
+                                 System.out.println("Painel de" + x.getNome());
+                                 System.out.println("1 - Calcular imposto");
+                                 System.out.println("2 - Fechar painel");
+                                 int resp = sn.nextInt();
+                                 switch(resp) {
+                                     case 1:
+                                           for(LucroPresumido l: clientelp){
+                                               l.calcularImposto();
+                                           }
+                                     break;
+                                     case 2:
+                                         sairPainelLp = false;
+                                         sairMenuLp = false;
+                                     break;
+                                     default:
+                                         System.out.println("Opção inválida tente novamente");
+                                     break;
+                                 }
+                                 
+                             } while (sairPainelLp == true);
+                             
+                             } else {
+                                    System.out.println("Usuário e senha inválidos!");
+                                    System.out.println("Quer tentar novamente?\n1-Sim\n2-Não");
+                                    int resp = sn.nextInt();
+                                    switch(resp) {
+                                        case 1:
+                                            sairMenuLp = true;
+                                        break;
+                                        case 2:
+                                            sairMenuLp = false;
+                                        break;
+                                        default:
+                                            System.out.println("Opção inválida.");
+                                        break;
+                                    }
+                                }   
+                            }
+                    } while (sairMenuLp == true);
             }
-        }
-      
-      }
+            break;
+                case 3:
+                break;
+                case 4: 
+                    System.out.println("Fechando o programa...");
+                    sairMenuPrincipal = false;
+                break;
+                default:
+                 break;
+            }
     
+        }while (sairMenuPrincipal == true);  
+        
+        
+                    }
+}
     
     
     
